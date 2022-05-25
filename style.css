@@ -3,3 +3,53 @@
     padding: 0;
     overflow:hidden;
 }
+ion-icon {
+    color: white;
+}
+
+iframe {
+    width: 33vw;
+    height: 100vh;
+}
+
+#openButton{
+    cursor: pointer;
+    transition: all .4s ease-in-out;
+}
+#openButtonContainer {
+    position:fixed;
+    display:flex;
+    right: 0vw;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    transition: all .4s ease-in-out;
+}
+
+#openButtonContainer.open {
+    right: 33vw;
+}
+
+#openButton.open {
+    transform: rotateZ(180deg);
+}
+
+#openButtonContainer {
+    position:fixed;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+#sideWindow {
+    position: fixed;
+    right: -33vw;
+    width: 33vw;
+    height: 100vh;
+    transition: all .4s ease-in-out;
+}
+
+#sideWindow.open {
+    right: 0vw;
+}

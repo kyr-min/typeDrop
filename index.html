@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js" integrity="sha512-5T245ZTH0m0RfONiFm2NF0zcYcmAuNzcGyPSQ18j8Bs5Pbfhp5HP1hosrR8XRt5M3kSRqzjNMYpm2+it/AUX/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
@@ -29,6 +31,12 @@
     <input type="hidden"  class="hiddenInput" value="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC6WC_aqczvnfTHtMqfhch_f87nuhNc8OO7i6xRPGnR31U7GobH6uN2V7SvRY&s">
     <input type="hidden"  class="hiddenInput" value="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDzQBoj-UPeNDEnRCJHzG49ir6K-EJNOyaj4QqkuS6wIs4xfOsPR5sMGv3zQ&s">
     <input type="hidden"  class="hiddenInput" value="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcHVMjNPvOUYlsLgegThLcgmCnFHoBuOtIkZo0RWkqA76tEUwDSpdUwXGhZvU&s">
+    <div id="openButtonContainer">
+        <ion-icon name="chevron-back-outline" id="openButton" size="large" onclick="openHandle(); disableClick(this)"></ion-icon>
+    </div>
+    <div id="sideWindow">
+        <iframe src="https://blog.naver.com/doek11/221634033486" frameborder="0"></iframe>
+    </div>
     <script src="index.js"></script>
 </body>
 </html>

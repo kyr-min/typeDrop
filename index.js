@@ -3,6 +3,8 @@ var imagesLink = [];
 
 var engine;
 
+let isOpen = false;
+
 let imageNumber = -1;
 let ropeNumber = 0;
 
@@ -98,7 +100,7 @@ function start(temp) {
         return Bodies.rectangle(x, y, arr[imageNumber].meta.width, arr[imageNumber].meta.height, { 
             restitution: 0.3, 
             friction: 0.2,
-            label: "image",
+            label: `image ${imageNumber}`,
             render: {
                 strokeStyle: '#ffffff',
                 sprite: {
@@ -148,13 +150,18 @@ function start(temp) {
         var pairs = event.pairs;
         for(let i =0; i< pairs.length; i++){
             var pair = pairs[i];
-            if((pair.bodyA == detectorA && pair.bodyB.label === "image")&& isColliding==0 ) {
+            if((pair.bodyA == detectorA && pair.bodyB.label.includes("image"))&& isColliding==0 ) {
                 isColliding = 1;
+
+                let imageIndex = pair.bodyB.label.slice(6, undefined);
                 hangingImage = pair.bodyB.id;
                 pair.bodyB.collisionFilter.group = -1;
+                let Xoffset = metaArr[imageIndex].width /2;
+                let Yoffset = metaArr[imageIndex].height /2;
+                
                 Composite.add(ropeC, Constraint.create({
                     bodyB: pair.bodyB,
-                    pointB: { x: -5, y: 0 },
+                    pointB: { x: Xoffset, y: Yoffset },
                     bodyA: pair.bodyA,
                     pointA : { x: 0, y: 0},
                     stiffness : 0.5,
@@ -166,13 +173,16 @@ function start(temp) {
                 console.log(pair.bodyB);
 
                 
-            } else if((pair.bodyB == detectorA && pair.bodyA.label === "image")&& isColliding==0) {
+            } else if((pair.bodyB == detectorA && pair.bodyA.label.includes("image"))&& isColliding==0) {
                 isColliding = 1;
+                let imageIndex = pair.bodyA.label.slice(6, undefined);
                 hangingImage = pair.bodyA.id;
                 pair.bodyA.collisionFilter.group = -1;
+                let Xoffset = metaArr[imageIndex].width /2;
+                let Yoffset = metaArr[imageIndex].height /2;
                 Composite.add(ropeC, Constraint.create({
                     bodyB: pair.bodyA,
-                    pointB: { x: -20, y: 0 },
+                    pointB: { x: 0, y: 0 },
                     bodyA: pair.bodyB,
                     pointA : { x: 0, y: 0},
                     stiffness : 0.5,
@@ -232,8 +242,7 @@ function start(temp) {
 function handleDetach(hangingImage, rope) {
     let block = Matter.Composite.get(engine.world, hangingImage, "body");
     let connection = Matter.Composite.get(rope, idStart, "constraint");
-
-    Matter.Composite.get(engine.world, hangingImage, "body").collisionFilter.group = 0;
+    setTimeout(() => {Matter.Composite.get(engine.world, hangingImage, "body").collisionFilter.group = 0;}, 1000)
     Matter.Composite.remove(rope, Matter.Composite.get(rope, idStart, "constraint"));
     isColliding = 0;
     idStart++;
@@ -242,4 +251,33 @@ function handleDetach(hangingImage, rope) {
     
 }
 
+function test() {
+    document.getElementById("sideWindow").classList.add("open");
+    document.getElementById("openButton").classList.add("open");
+    document.getElementById("openButtonContainer").classList.add("open");
+}
+
+function testtwo() {
+    document.getElementById("sideWindow").classList.remove("open");
+    document.getElementById("openButton").classList.remove("open");
+    document.getElementById("openButtonContainer").classList.remove("open");
+}
+
+
 init();
+
+function disableClick(element) {
+    element.style.pointerEvents = "none";
+    setTimeout(() => {
+        element.style.pointerEvents = "auto"
+    }, 450);
+}
+
+function openHandle() {
+    if(isOpen) {
+        testtwo();
+    } else {
+        test();
+        isOpen = true;
+    }
+}
