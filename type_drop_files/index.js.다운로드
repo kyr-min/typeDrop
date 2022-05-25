@@ -1,0 +1,18 @@
+var imgs = document.querySelectorAll("img");
+
+
+for(let i = 0; i< imgs.length; i++ ) {
+    let rnd = Math.random() * 2 + 2;
+    
+    
+    imgs[i].style.animation = `rain ${rnd}s linear infinite`
+    
+    imgs[i].onmouseover = () => {
+        imgs[i].style.animationPlayState = "paused";
+    }
+
+    imgs[i].onmouseout = () => {
+        imgs[i].style.animationPlayState = "running";
+    }
+}
+

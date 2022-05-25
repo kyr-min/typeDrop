@@ -1,0 +1,25 @@
+
+
+
+body {
+    overflow: hidden;
+    background-color: gray;
+}
+
+img {
+    transition: .2s;
+}
+
+img:hover {
+    
+}
+
+@keyframes rain {
+    0% {
+        transform: translateY(-50vh);
+    }
+
+    100% {
+        transform: translateY(125vh);
+    }
+}
