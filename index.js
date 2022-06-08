@@ -12,15 +12,18 @@ let timeOutA, timeOutB;
 
 let isColliding = 0;
 
-let hangingImage;
+let hangingImage = null;
 
 let idStart = 58;
+
+let rope;
 
 function init() {
     for(let i =0; i< 21; i++) {
         if(i < 20){
             let imgURL = document.querySelectorAll(".hiddenInput")[i].value;
-            getMeta(imgURL)
+            let originURL = document.querySelectorAll(".hiddenP")[i].innerText;
+            getMeta(imgURL, originURL)
         } else {
             setTimeout(() => {
                 start(imagesLink);
@@ -29,19 +32,17 @@ function init() {
         }
         
     }
-    console.log(imagesLink)
-
-    
 }
 
-function getMeta(url){
+function getMeta(url, origin){
     const img = new Image();
     img.addEventListener("load", function() {
         let obj = {width: this.naturalWidth, height: this.naturalHeight}
         metaArr.push(obj)
         let res = {
             url: url,
-            meta: obj
+            meta: obj,
+            origin: `https://google.com${origin}`
         }
         imagesLink.push(res);
     });
@@ -50,7 +51,7 @@ function getMeta(url){
 
 function start(temp) {
     let arr = temp;
-    console.log(arr);
+    console.log(imagesLink);
 
     var Engine = Matter.Engine,
         Render = Matter.Render,
@@ -144,6 +145,8 @@ function start(temp) {
         stack,
     ]);
 
+    rope = ropeC
+
     //40 41
     detectorA = Composite.get(ropeC, 41, "body");
     Events.on(engine, 'collisionStart', function(event) {
@@ -154,7 +157,13 @@ function start(temp) {
                 isColliding = 1;
 
                 let imageIndex = pair.bodyB.label.slice(6, undefined);
-                hangingImage = pair.bodyB.id;
+                console.log(imageIndex);
+                console.log(hangingImage);
+                hangingImage =  {
+                    id: pair.bodyB.id,
+                    url: imagesLink[imageIndex].origin
+                }
+                
                 pair.bodyB.collisionFilter.group = -1;
                 let Xoffset = metaArr[imageIndex].width /2;
                 let Yoffset = metaArr[imageIndex].height /2;
@@ -170,13 +179,19 @@ function start(temp) {
                         visible: false
                     }
                 }));
+                setSidebarUrl()
                 console.log(pair.bodyB);
-
-                
+                // setTimeout(() => {
+                //     console.log("detaching");
+                //     handleDetach(ropeC);
+                // }, 3000)
             } else if((pair.bodyB == detectorA && pair.bodyA.label.includes("image"))&& isColliding==0) {
                 isColliding = 1;
                 let imageIndex = pair.bodyA.label.slice(6, undefined);
-                hangingImage = pair.bodyA.id;
+                hangingImage =  {
+                    id: pair.bodyA.id,
+                    url: imagesLink[imageIndex].origin
+                }
                 pair.bodyA.collisionFilter.group = -1;
                 let Xoffset = metaArr[imageIndex].width /2;
                 let Yoffset = metaArr[imageIndex].height /2;
@@ -191,12 +206,13 @@ function start(temp) {
                         visible: false
                     }
                 }));
+                setSidebarUrl()
                 console.log(pair.bodyA);
 
-                setTimeout(() => {
-                    console.log("detaching");
-                    handleDetach(hangingImage,ropeC);
-                }, 3000)
+                // setTimeout(() => {
+                //     console.log("detaching");
+                //     handleDetach(ropeC);
+                // }, 3000)
             }
         }
 
@@ -239,16 +255,14 @@ function start(temp) {
     }
 }
 
-function handleDetach(hangingImage, rope) {
-    let block = Matter.Composite.get(engine.world, hangingImage, "body");
+function handleDetach(rope) {
+    let block = Matter.Composite.get(engine.world, hangingImage.id, "body");
     let connection = Matter.Composite.get(rope, idStart, "constraint");
-    setTimeout(() => {Matter.Composite.get(engine.world, hangingImage, "body").collisionFilter.group = 0;}, 1000)
+    setTimeout(() => {Matter.Composite.get(engine.world, hangingImage.id, "body").collisionFilter.group = 0; hangingImage = null;}, 1000)
     Matter.Composite.remove(rope, Matter.Composite.get(rope, idStart, "constraint"));
     isColliding = 0;
+    setSidebarUrl(1)
     idStart++;
-    // connection.bodyA = {};
-    // connection.bodyB = {};
-    
 }
 
 function test() {
@@ -266,6 +280,16 @@ function testtwo() {
 
 init();
 
+function setSidebarUrl(toExample = 0) {
+    if(toExample == 0) {
+        console.log(hangingImage.url);
+        document.getElementById("sideIframe").src = hangingImage.url;
+    } else {
+        document.getElementById("sideIframe").src = "https://example.com/";
+    }
+    
+}
+
 function disableClick(element) {
     element.style.pointerEvents = "none";
     setTimeout(() => {
@@ -276,6 +300,7 @@ function disableClick(element) {
 function openHandle() {
     if(isOpen) {
         testtwo();
+        isOpen = false;
     } else {
         test();
         isOpen = true;

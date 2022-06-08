@@ -53,3 +53,7 @@ iframe {
 #sideWindow.open {
     right: 0vw;
 }
+
+.hiddenP {
+    display:none;
+}
